@@ -74,26 +74,26 @@ PRD (WHY/WHAT)
 
 ```bash
 # 1. 이 저장소 클론
-git clone https://github.com/hapvi/bmad-mao.git
+git clone https://github.com/NPO-HappyTogether/bmad-hapvi.git
 
 # 2. BMad가 설치된 프로젝트 루트에서 실행
-bash /path/to/bmad-mao/install.sh
+bash /path/to/bmad-hapvi/install.sh
 
 # 또는 경로를 직접 지정
-bash /path/to/bmad-mao/install.sh /path/to/my-project
+bash /path/to/bmad-hapvi/install.sh /path/to/my-project
 ```
 
 ### Windows (PowerShell)
 
 ```powershell
 # 1. 이 저장소 클론
-git clone https://github.com/hapvi/bmad-mao.git
+git clone https://github.com/NPO-HappyTogether/bmad-hapvi.git
 
 # 2. BMad가 설치된 프로젝트 루트에서 실행
-.\bmad-mao\install.ps1
+.\bmad-hapvi\install.ps1
 
 # 또는 경로를 직접 지정
-.\bmad-mao\install.ps1 -ProjectPath "C:\path\to\my-project"
+.\bmad-hapvi\install.ps1 -ProjectPath "C:\path\to\my-project"
 ```
 
 ### 설치 확인
@@ -152,7 +152,7 @@ Claude Code를 열고 `/mao-` 를 입력해 자동완성이 뜨면 설치 성공
 ```bash
 # 현재 버전을 프로젝트 내 아카이브에 보관한 뒤 새 버전 설치
 cp -r .claude/skills/mao-create-contracts .claude/skills/mao-old/v현재버전/
-bash /path/to/bmad-mao/install.sh
+bash /path/to/bmad-hapvi/install.sh
 ```
 
 ### 이전 버전으로 롤백
@@ -167,6 +167,15 @@ cp -r .claude/skills/mao-old/v0.1.0/mao-create-contracts .claude/skills/
 |------|------|-----------|
 | v0.2.0 | 2026-05-27 | mao-spark 추가 (빠른 HTML 프로토타입 탐색) |
 | v0.1.0 | 2026-05-27 | 최초 릴리스 — 스킬 4종 |
+
+---
+
+## 라이선스 및 저작권
+
+MIT License — Copyright (c) 2026 NPO-HappyTogether. 전체 내용은 [LICENSE](LICENSE) 파일을 참조하세요.
+
+이 프로젝트는 [BMad Method](https://github.com/bmad-code-org/BMAD-METHOD) (MIT License, © BMad Code, LLC)의 **독립적인 확장 모듈**입니다.
+BMad Code, LLC와 공식적으로 제휴하거나 승인받은 프로젝트가 아닙니다.
 
 ---
 ---
@@ -208,18 +217,18 @@ For quick team brainstorming, start with `/mao-spark` to lock in a direction bef
 
 **Mac / Linux**
 ```bash
-git clone https://github.com/hapvi/bmad-mao.git
-bash /path/to/bmad-mao/install.sh
+git clone https://github.com/NPO-HappyTogether/bmad-hapvi.git
+bash /path/to/bmad-hapvi/install.sh
 # or with explicit project path:
-bash /path/to/bmad-mao/install.sh /path/to/my-project
+bash /path/to/bmad-hapvi/install.sh /path/to/my-project
 ```
 
 **Windows (PowerShell)**
 ```powershell
-git clone https://github.com/hapvi/bmad-mao.git
-.\bmad-mao\install.ps1
+git clone https://github.com/NPO-HappyTogether/bmad-hapvi.git
+.\bmad-hapvi\install.ps1
 # or with explicit project path:
-.\bmad-mao\install.ps1 -ProjectPath "C:\path\to\my-project"
+.\bmad-hapvi\install.ps1 -ProjectPath "C:\path\to\my-project"
 ```
 
 After installation, `.claude/skills/` in your project will contain all five skills. Open Claude Code and type `/mao-` to confirm auto-complete appears.
@@ -264,3 +273,12 @@ After installation, `.claude/skills/` in your project will contain all five skil
 |---------|------|---------|
 | v0.2.0 | 2026-05-27 | Added mao-spark (fast HTML prototyping skill) |
 | v0.1.0 | 2026-05-27 | Initial release — 4 skills |
+
+---
+
+## License & Attribution
+
+MIT License — Copyright (c) 2026 NPO-HappyTogether. See [LICENSE](LICENSE) for details.
+
+This project is an **independent extension module** for the [BMad Method](https://github.com/bmad-code-org/BMAD-METHOD) (MIT License, © BMad Code, LLC).  
+Not affiliated with or endorsed by BMad Code, LLC.
