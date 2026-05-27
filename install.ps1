@@ -55,7 +55,8 @@ $Skills = @(
     "mao-create-contracts",
     "mao-orchestrate",
     "mao-score-review",
-    "mao-auto-upgrade"
+    "mao-auto-upgrade",
+    "mao-spark"
 )
 
 foreach ($skill in $Skills) {
@@ -132,4 +133,5 @@ Write-Color "  /mao-create-contracts   PRD → 계약서 생성" "Cyan"
 Write-Color "  /mao-orchestrate        에이전트 배포 및 관리" "Cyan"
 Write-Color "  /mao-score-review       품질 점수화" "Cyan"
 Write-Color "  /mao-auto-upgrade       자동 업그레이드" "Cyan"
+Write-Color "  /mao-spark              빠른 HTML 프로토타입 탐색" "Cyan"
 Write-Color ""

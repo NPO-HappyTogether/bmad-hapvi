@@ -56,6 +56,7 @@ SKILLS=(
     "mao-orchestrate"
     "mao-score-review"
     "mao-auto-upgrade"
+    "mao-spark"
 )
 # ※ old/ 폴더는 아카이브 전용 — 설치 대상 아님
 
@@ -131,4 +132,5 @@ echo "  /mao-create-contracts   PRD → 계약서 생성"
 echo "  /mao-orchestrate        에이전트 배포 및 관리"
 echo "  /mao-score-review       품질 점수화"
 echo "  /mao-auto-upgrade       자동 업그레이드"
+echo "  /mao-spark              빠른 HTML 프로토타입 탐색"
 echo ""

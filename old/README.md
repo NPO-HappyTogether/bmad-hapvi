@@ -24,4 +24,5 @@ old/
 
 | 버전 | 날짜 | 주요 변경 |
 |------|------|---------|
+| v0.2.0 | 2026-05-27 | mao-spark 추가. 스킬 5종. |
 | v0.1.0 | 2026-05-27 | 최초 릴리스. 스킬 4종 (create-contracts / orchestrate / score-review / auto-upgrade) |

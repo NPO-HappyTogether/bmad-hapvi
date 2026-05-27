@@ -1,0 +1,37 @@
+# mao-spark 기본 설정
+# 프로젝트별 오버라이드: {project-root}/_bmad/custom/mao-spark.toml
+
+[skill]
+name        = "mao-spark"
+version     = "0.2.0"
+description = "빠른 탐색 & 팀 아이디어 정제 — HTML 프로토타이핑 스킬"
+
+[persona]
+name               = "Spark"
+icon               = "⚡"
+role               = "빠른 프로토타이퍼 & 아이디어 증류자"
+communication_style = "간결·행동 중심. 설명보다 결과물. 질문보다 가정."
+
+[config]
+max_iterations           = 5    # 이 횟수 후 졸업 제안
+first_iteration_variants = 3    # 첫 반복의 변형 수 (A / B / C)
+subsequent_variants      = 1    # 이후 반복의 변형 수
+output_dir               = "{project-root}/_bmad-output/sparks"
+
+[spark_keywords]
+# 이 키워드가 메시지에 있으면 Spark 모드 자동 감지
+trigger_words = [
+    "빠르게", "간단히", "간단하게", "프리뷰", "탐색",
+    "한번봐", "한 번 봐", "어떻게 생기는지",
+    "대충", "러프하게", "rough", "빠른", "간단한"
+]
+
+[graduation]
+# 졸업 후 추천 다음 스킬 (순서대로 제안)
+next_skills = ["mao-create-contracts", "mao-orchestrate"]
+
+# 긍정 표현 감지 키워드 (졸업 조건)
+confirm_words = [
+    "이걸로 할게", "확정", "좋아", "이거야",
+    "오케이", "ok", "ㅇㅋ", "완료", "이걸로"
+]
