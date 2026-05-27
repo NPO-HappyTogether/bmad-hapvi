@@ -8,6 +8,22 @@
 
 ---
 
+## 빠른 설치 (한 줄 명령어)
+
+BMad가 설치된 **프로젝트 루트**에서 실행하세요.
+
+**Mac / Linux**
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/NPO-HappyTogether/bmad-hapvi/master/install.sh)
+```
+
+**Windows (PowerShell)**
+```powershell
+irm https://raw.githubusercontent.com/NPO-HappyTogether/bmad-hapvi/master/install.ps1 | iex
+```
+
+---
+
 ## 목차
 
 - [이게 뭔가요?](#이게-뭔가요)
@@ -201,6 +217,22 @@ Auto-improve        (/mao-auto-upgrade)       ← detect patterns → improve pr
 ```
 
 For quick team brainstorming, start with `/mao-spark` to lock in a direction before the full flow.
+
+---
+
+### Quick Install (one-liner)
+
+Run from your **project root** (where `_bmad/` lives).
+
+**Mac / Linux**
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/NPO-HappyTogether/bmad-hapvi/master/install.sh)
+```
+
+**Windows (PowerShell)**
+```powershell
+irm https://raw.githubusercontent.com/NPO-HappyTogether/bmad-hapvi/master/install.ps1 | iex
+```
 
 ---
 
