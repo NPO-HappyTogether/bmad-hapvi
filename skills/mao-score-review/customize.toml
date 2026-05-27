@@ -1,0 +1,18 @@
+# mao-score-review 커스터마이제이션
+
+[workflow]
+activation_steps_prepend = []
+activation_steps_append = []
+
+persistent_facts = [
+  "수치와 증거만 다룬다. 추측하지 않으며 확인 불가 항목은 '확인 불가'로 표기한다.",
+  "사람이 최종 판단한다. 점수판을 제출하고 멈춘다.",
+]
+
+[scoring_weights]
+contract_compliance = 0.40
+prd_coverage = 0.30
+integration_readiness = 0.20
+code_quality = 0.10
+
+on_complete = ""
