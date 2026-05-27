@@ -1,0 +1,10 @@
+# 줄바꿈 통일 (CRLF 경고 방지)
+* text=auto
+*.md text eol=lf
+*.toml text eol=lf
+*.sh text eol=lf
+*.yaml text eol=lf
+*.ts text eol=lf
+
+# install.sh는 반드시 LF (sh 실행 파일)
+install.sh text eol=lf

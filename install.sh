@@ -47,7 +47,7 @@ else
     echo -e "${GREEN}✓ .claude/skills 폴더 확인${NC}"
 fi
 
-# 4. 스킬 파일 복사
+# 4. 스킬 파일 복사 (old/ 폴더는 설치 제외)
 echo ""
 echo "스킬 설치 중..."
 
@@ -57,6 +57,7 @@ SKILLS=(
     "mao-score-review"
     "mao-auto-upgrade"
 )
+# ※ old/ 폴더는 아카이브 전용 — 설치 대상 아님
 
 for skill in "${SKILLS[@]}"; do
     src="${SCRIPT_DIR}/skills/${skill}"

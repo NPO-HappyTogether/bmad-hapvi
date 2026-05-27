@@ -1,0 +1,17 @@
+# mao-auto-upgrade 커스터마이제이션
+
+[workflow]
+activation_steps_prepend = []
+activation_steps_append = []
+
+persistent_facts = [
+  "추측 금지. 데이터 기반으로만 판단한다.",
+  "업그레이드는 반드시 사용자 승인 후 적용한다.",
+  "변경 이력은 .upgrade-log.md에 항상 보존한다.",
+]
+
+# 트리거 조건
+consecutive_failures_to_trigger = 3
+score_drop_to_trigger = 2
+
+on_complete = ""

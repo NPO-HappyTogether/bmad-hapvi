@@ -1,0 +1,22 @@
+# mao-orchestrate 커스터마이제이션
+# _bmad/custom/mao-orchestrate.toml 에서 오버라이드 가능
+
+[workflow]
+activation_steps_prepend = []
+activation_steps_append = []
+
+persistent_facts = [
+  "file:{project-root}/**/project-context.md",
+  "브리핑은 에이전트가 다른 맥락 없이 단독 실행 가능할 만큼 완결되어야 한다.",
+  "사람이 최종 판단한다. 점수판을 항상 제출하고 멈춘다.",
+]
+
+# 점수 임계값
+score_pass = 8
+score_summary_rebrief = 6
+score_precision_rebrief = 5
+
+# 최대 재시도 라운드
+max_rounds = 5
+
+on_complete = ""
