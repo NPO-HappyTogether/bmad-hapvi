@@ -1,137 +1,266 @@
 # BMad MAO — Multi-Agent Orchestration Module
-# BMad MAO — 멀티에이전트 오케스트레이션 모듈
 
-> PRD를 에이전트 실행 계약서로 변환하고, 병렬 에이전트를 배포·검증·개선하는 BMad 확장 모듈.
->
-> Extends BMad Method with contract-driven parallel agent orchestration, quality scoring, and auto-upgrade loops.
+> **BMad Method** 위에서 동작하는 멀티 에이전트 오케스트레이션 확장 모듈
+
+[![version](https://img.shields.io/badge/version-v0.2.0-blue)](CHANGELOG.md)
+[![license](https://img.shields.io/badge/license-MIT-green)](#)
+[![BMad](https://img.shields.io/badge/requires-BMad-orange)](#사전-요구사항)
 
 ---
 
-## 포함 스킬 (Included Skills)
+## 목차
+
+- [이게 뭔가요?](#이게-뭔가요)
+- [스킬 목록](#스킬-목록)
+- [사전 요구사항](#사전-요구사항)
+- [설치 방법](#설치-방법)
+- [기본 사용 흐름](#기본-사용-흐름)
+- [버전 관리 / 롤백](#버전-관리--롤백)
+- [English](#english)
+
+---
+
+## 이게 뭔가요?
+
+BMad MAO는 **BMad Method**를 사용하는 프로젝트에 추가할 수 있는 멀티 에이전트 오케스트레이션 모듈입니다.
+
+PRD를 작성한 뒤 여러 에이전트를 **동시에 병렬로** 실행하고, 그 결과물을 **계약서(Contract)** 기반으로 검증·통합하는 워크플로우를 제공합니다.
+
+```
+PRD (WHY/WHAT)
+    ↓
+계약서 생성 (/mao-create-contracts)   ← 에이전트 간 인터페이스 명세
+    ↓
+병렬 에이전트 배포 (/mao-orchestrate) ← 각 에이전트가 독립된 영역 담당
+    ↓
+품질 점수화 (/mao-score-review)       ← 10점 만점 3단계 검증
+    ↓
+자동 개선 (/mao-auto-upgrade)         ← 반복 실패 패턴 감지 → 프롬프트 개선
+```
+
+팀 브레인스토밍용 빠른 프로토타입이 필요하면 `/mao-spark`로 먼저 방향을 잡은 뒤 위 흐름으로 넘어갈 수 있습니다.
+
+---
+
+## 스킬 목록
 
 | 스킬 | 페르소나 | 역할 |
-|------|---------|------|
-| `mao-create-contracts` | 📐 Winston+ | PRD → 에이전트 실행 계약서 생성. 타이트/러프 모드 선택, 멀티에이전트 설계 리뷰 |
-| `mao-orchestrate` | 🎯 Atlas | 계약서 기반 브리핑 생성, 에이전트 병렬 배포, 재브리핑 |
-| `mao-score-review` | 📊 시스템 | 3단계 품질 평가 (L1 자동 / L2 요약 / L3 상세), 점수판 생성 |
-| `mao-auto-upgrade` | 🔄 패턴 분석가 | 반복 실패 패턴 감지, 에이전트·계약서·체크리스트 자동 개선 제안 |
+|------|----------|------|
+| `/mao-create-contracts` | Winston+ 📐 | PRD → 인터페이스 계약서 생성 (타이트/러프/혼합 모드) |
+| `/mao-orchestrate` | Atlas 🎯 | 병렬 에이전트 배포·브리핑·재브리핑 |
+| `/mao-score-review` | — | 3단계 품질 점수화 (L1 자동 / L2 요약 / L3 상세) |
+| `/mao-auto-upgrade` | — | 반복 실패 패턴 감지 → 에이전트 프롬프트 자동 개선 제안 |
+| `/mao-spark` | Spark ⚡ | 빠른 HTML 프로토타입 탐색 (질문 없이 즉시 시작) |
 
 ---
 
-## 전체 흐름 (Full Flow)
+## 사전 요구사항
 
-```
-PRD 완성
-   ↓
-📐 mao-create-contracts
-   PRD 분석 → 실행 모드 선택 (타이트/러프/혼합)
-   → 설계 결정 협업 (멀티에이전트 딥다이브 가능)
-   → 00-index.md 사용자 승인
-   → 계약서 파일 생성
-   ↓
-🎯 mao-orchestrate
-   브리핑 생성 → 에이전트 병렬 배포
-   ↓
-📊 mao-score-review
-   L1 자동 → L2 요약 → L3 상세
-   점수판 출력 (사람이 최종 판단)
-   ↓
-   8~10점 ✅ 통과      6~7점 ⚠️ 재브리핑      0~5점 ❌ 정밀 재브리핑
-       ↓                     ↓                        ↓
-   다음 단계           mao-orchestrate 재실행    mao-orchestrate 재실행
-   ↓
-🔄 mao-auto-upgrade (Sprint 완료 후)
-   패턴 감지 → 리서치 → 개선 제안 → 승인 → 적용
-```
+1. **BMad Method 설치** — 프로젝트에 `_bmad/` 폴더가 있어야 합니다.
+   > BMad 설치: https://github.com/bmad-method/bmad-method
+
+2. **Claude Code** — Anthropic Claude Code CLI가 설치되어 있어야 합니다.
+
+3. **git 초기화 (권장)** — 워크트리 격리 기능을 쓰려면 필수입니다.
+   ```bash
+   git init
+   ```
 
 ---
 
-## 실행 모드 (Execution Modes)
-
-| 모드 | 설명 | 언제 사용 |
-|------|------|---------|
-| 🔒 **타이트** | 필드·타입·에러코드까지 모두 명시. 에이전트 자율 없음 | 핵심 경로, 운영 시스템 |
-| 🔓 **러프** | 목적과 방향만 명시. 세부 설계는 에이전트 자율 | 탐색, PoC, 보조 기능 |
-| ⚖️ **혼합** | 핵심 경로는 타이트, 보조 기능은 러프 | 일반적인 개발 (권장) |
-
----
-
-## 요구사항 (Requirements)
-
-- BMad Method 설치됨 (`_bmad/` 폴더 존재)
-- Git 초기화됨 (`git init`) — 워크트리 기능 사용 시 필수
-- Claude Code
-
----
-
-## 설치 (Installation)
+## 설치 방법
 
 ### Mac / Linux
+
 ```bash
-cd /path/to/your/project   # BMad가 설치된 프로젝트 루트
+# 1. 이 저장소 클론
+git clone https://github.com/hapvi/bmad-mao.git
+
+# 2. BMad가 설치된 프로젝트 루트에서 실행
+bash /path/to/bmad-mao/install.sh
+
+# 또는 경로를 직접 지정
+bash /path/to/bmad-mao/install.sh /path/to/my-project
+```
+
+### Windows (PowerShell)
+
+```powershell
+# 1. 이 저장소 클론
+git clone https://github.com/hapvi/bmad-mao.git
+
+# 2. BMad가 설치된 프로젝트 루트에서 실행
+.\bmad-mao\install.ps1
+
+# 또는 경로를 직접 지정
+.\bmad-mao\install.ps1 -ProjectPath "C:\path\to\my-project"
+```
+
+### 설치 확인
+
+설치가 완료되면 프로젝트의 `.claude/skills/` 폴더에 다음이 생깁니다:
+
+```
+.claude/skills/
+  ├── mao-create-contracts/
+  ├── mao-orchestrate/
+  ├── mao-score-review/
+  ├── mao-auto-upgrade/
+  └── mao-spark/
+```
+
+Claude Code를 열고 `/mao-` 를 입력해 자동완성이 뜨면 설치 성공입니다.
+
+---
+
+## 기본 사용 흐름
+
+### A. 빠른 탐색 → 정식 개발
+
+처음 아이디어를 탐색하거나 팀과 방향을 맞출 때:
+
+```
+1. /mao-spark              → HTML 프로토타입으로 방향 잡기 (A/B/C 3가지 제안)
+2. /mao-create-contracts   → 확정된 방향으로 계약서 작성
+3. /mao-orchestrate        → 에이전트 병렬 배포
+4. /mao-score-review       → 결과물 품질 검증
+```
+
+### B. PRD가 준비된 경우 → 바로 개발
+
+```
+1. /mao-create-contracts   → PRD → 계약서 생성
+2. /mao-orchestrate        → 에이전트 배포 (타이트/러프/혼합 모드 선택)
+3. /mao-score-review       → 점수 확인 (8점 이상 통과)
+4. /mao-auto-upgrade       → 3회 연속 실패 시 자동 개선 제안
+```
+
+### 실행 모드
+
+| 모드 | 설명 | 추천 상황 |
+|------|------|-----------|
+| **타이트** | 계약서 조건을 엄격하게 준수, 이탈 금지 | 명세가 확실할 때 |
+| **러프** | 계약서를 가이드라인으로만 활용, 자율 허용 | 탐색·실험 단계 |
+| **혼합** | 핵심 인터페이스만 타이트, 나머지 자율 | 기본값 (권장) |
+
+---
+
+## 버전 관리 / 롤백
+
+### 새 버전으로 업그레이드
+
+```bash
+# 현재 버전을 프로젝트 내 아카이브에 보관한 뒤 새 버전 설치
+cp -r .claude/skills/mao-create-contracts .claude/skills/mao-old/v현재버전/
 bash /path/to/bmad-mao/install.sh
 ```
 
-### Windows
+### 이전 버전으로 롤백
+
+```bash
+cp -r .claude/skills/mao-old/v0.1.0/mao-create-contracts .claude/skills/
+```
+
+### 버전 이력
+
+| 버전 | 날짜 | 주요 변경 |
+|------|------|-----------|
+| v0.2.0 | 2026-05-27 | mao-spark 추가 (빠른 HTML 프로토타입 탐색) |
+| v0.1.0 | 2026-05-27 | 최초 릴리스 — 스킬 4종 |
+
+---
+---
+
+## English
+
+### What is BMad MAO?
+
+BMad MAO is a **Multi-Agent Orchestration** extension module for projects using the [BMad Method](https://github.com/bmad-method/bmad-method).
+
+After writing a PRD, it lets you run multiple AI agents **in parallel** — each handling an isolated scope — then validates and integrates their outputs using **interface contracts** derived from the PRD.
+
+```
+PRD (WHY / WHAT)
+    ↓
+Generate contracts  (/mao-create-contracts)  ← interface specs between agents
+    ↓
+Deploy agents       (/mao-orchestrate)        ← each agent owns its domain
+    ↓
+Score results       (/mao-score-review)       ← 3-level quality check (10-pt scale)
+    ↓
+Auto-improve        (/mao-auto-upgrade)       ← detect patterns → improve prompts
+```
+
+For quick team brainstorming, start with `/mao-spark` to lock in a direction before the full flow.
+
+---
+
+### Prerequisites
+
+1. **BMad Method** installed (`_bmad/` folder in your project root)
+   > https://github.com/bmad-method/bmad-method
+2. **Claude Code** (Anthropic Claude Code CLI)
+3. **git init** (recommended — required for worktree isolation)
+
+---
+
+### Installation
+
+**Mac / Linux**
+```bash
+git clone https://github.com/hapvi/bmad-mao.git
+bash /path/to/bmad-mao/install.sh
+# or with explicit project path:
+bash /path/to/bmad-mao/install.sh /path/to/my-project
+```
+
+**Windows (PowerShell)**
 ```powershell
-cd C:\path\to\your\project   # BMad가 설치된 프로젝트 루트
-powershell -ExecutionPolicy Bypass -File C:\path\to\bmad-mao\install.ps1
+git clone https://github.com/hapvi/bmad-mao.git
+.\bmad-mao\install.ps1
+# or with explicit project path:
+.\bmad-mao\install.ps1 -ProjectPath "C:\path\to\my-project"
 ```
 
-설치 후 Claude Code에서 `/mao-create-contracts` 입력하면 바로 사용 가능.
+After installation, `.claude/skills/` in your project will contain all five skills. Open Claude Code and type `/mao-` to confirm auto-complete appears.
 
 ---
 
-## 파일 구조 (Package Structure)
+### Skills
 
-```
-bmad-mao/
-  ├── README.md
-  ├── install.sh               (Mac/Linux 설치 스크립트)
-  ├── install.ps1              (Windows 설치 스크립트)
-  └── skills/
-      ├── mao-create-contracts/
-      │   ├── SKILL.md
-      │   ├── customize.toml
-      │   ├── steps/           (단계별 실행 파일)
-      │   ├── assets/
-      │   └── templates/
-      ├── mao-orchestrate/
-      │   ├── SKILL.md
-      │   └── customize.toml
-      ├── mao-score-review/
-      │   ├── SKILL.md
-      │   └── customize.toml
-      └── mao-auto-upgrade/
-          ├── SKILL.md
-          └── customize.toml
-```
+| Skill | Persona | Role |
+|-------|---------|------|
+| `/mao-create-contracts` | Winston+ 📐 | Generate interface contracts from PRD (tight / loose / mixed mode) |
+| `/mao-orchestrate` | Atlas 🎯 | Deploy parallel agents, generate briefings, re-brief on failure |
+| `/mao-score-review` | — | 3-level quality scoring (L1 auto / L2 summary / L3 detailed) |
+| `/mao-auto-upgrade` | — | Detect repeated failure patterns → suggest prompt improvements |
+| `/mao-spark` | Spark ⚡ | Fast HTML prototype exploration — no questions, instant A/B/C output |
 
 ---
 
-## 커스터마이제이션
+### Basic Usage
 
-프로젝트별 설정은 `_bmad/custom/` 폴더에서:
+**Quick exploration → production**
+```
+/mao-spark              → align team direction with HTML prototypes (A/B/C vote)
+/mao-create-contracts   → turn chosen direction into interface contracts
+/mao-orchestrate        → deploy agents in parallel
+/mao-score-review       → verify quality (pass threshold: 8/10)
+```
 
-```toml
-# _bmad/custom/mao-score-review.toml
-[scoring_weights]
-contract_compliance = 0.50   # 계약 준수 가중치 높이기
-prd_coverage = 0.25
-integration_readiness = 0.15
-code_quality = 0.10
+**PRD already written → straight to development**
+```
+/mao-create-contracts   → PRD → contracts
+/mao-orchestrate        → deploy (tight / loose / mixed mode)
+/mao-score-review       → score check
+/mao-auto-upgrade       → auto-improve after 3 consecutive failures
 ```
 
 ---
 
-## BMad 정신 계승
+### Version History
 
-이 모듈은 BMad Method의 핵심 원칙을 그대로 이어받습니다:
-- **사람이 이해하면서 결정하고, 에이전트는 실행한다**
-- 모든 결정은 `decision-log`에 이력 보존
-- 불필요한 질문 최소화 (자동 추출 가능한 것은 묻지 않음)
-- Fast Path / Coaching Path → 타이트 / 러프 모드
-
----
-
-MIT License
+| Version | Date | Changes |
+|---------|------|---------|
+| v0.2.0 | 2026-05-27 | Added mao-spark (fast HTML prototyping skill) |
+| v0.1.0 | 2026-05-27 | Initial release — 4 skills |
