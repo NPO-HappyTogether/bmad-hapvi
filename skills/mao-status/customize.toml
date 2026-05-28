@@ -1,0 +1,15 @@
+# DO NOT EDIT -- overwritten on every update.
+#
+# Workflow customization surface for mao-status.
+
+[workflow]
+
+activation_steps_prepend = []
+activation_steps_append = []
+
+persistent_facts = [
+  "file:{project-root}/docs/bmad-status.md",
+  "file:{project-root}/_bmad-output/planning-artifacts/prds/**/.decision-log.md",
+]
+
+on_complete = ""

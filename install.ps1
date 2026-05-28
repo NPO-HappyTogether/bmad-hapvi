@@ -56,7 +56,8 @@ $Skills = @(
     "mao-orchestrate",
     "mao-score-review",
     "mao-auto-upgrade",
-    "mao-spark"
+    "mao-spark",
+    "mao-status"
 )
 
 foreach ($skill in $Skills) {
@@ -121,6 +122,33 @@ description = "PRD에서 인터페이스 계약을 도출하고 실행 모드(�
     Write-Color "✓ _bmad/custom/config.toml 업데이트" "Green"
 }
 
+# 6. CLAUDE.md 세션 시작 프로토콜 섹션 추가
+$ClaudeMd = "$ProjectPath\CLAUDE.md"
+$SessionProtocol = @'
+
+## BMad MAO 세션 시작 프로토콜
+
+**매 대화 시작 시 반드시 실행:**
+1. `docs/bmad-status.md` 파일이 존재하면 읽고 현재 상태를 표시한다.
+2. 현재 BMad 워크플로우 위치, 중단 지점, 다음 즉시 액션을 요약해서 사용자에게 보여준다.
+3. 사용자가 별도 지시를 하기 전까지 이 상태를 기반으로 응답한다.
+4. `/mao-status` 스킬로 상세 상태를 언제든 확인할 수 있다.
+'@
+
+if (-not (Test-Path $ClaudeMd)) {
+    # CLAUDE.md 없으면 최소 버전 생성
+    Set-Content -Path $ClaudeMd -Value "# 프로젝트`n" -Encoding utf8
+    Write-Color "✓ CLAUDE.md 생성" "Green"
+}
+
+$claudeContent = Get-Content $ClaudeMd -Raw -ErrorAction SilentlyContinue
+if ($claudeContent -and $claudeContent.Contains("BMad MAO 세션 시작 프로토콜")) {
+    Write-Color "⚠ CLAUDE.md에 세션 프로토콜이 이미 존재합니다. 건너뜀." "Yellow"
+} else {
+    Add-Content -Path $ClaudeMd -Value $SessionProtocol -Encoding utf8
+    Write-Color "✓ CLAUDE.md 세션 시작 프로토콜 추가" "Green"
+}
+
 Write-Color ""
 Write-Color "╔══════════════════════════════════════════╗" "Green"
 Write-Color "║          ✅ MAO 모듈 설치 완료!          ║" "Green"
@@ -129,6 +157,7 @@ Write-Color ""
 Write-Color "사용 방법:" "White"
 Write-Color "  Claude Code에서 다음을 입력하세요:" "White"
 Write-Color ""
+Write-Color "  /mao-status             현재 워크플로우 상태 확인  ← 세션 시작 시 자동 표시" "Cyan"
 Write-Color "  /mao-create-contracts   PRD → 계약서 생성" "Cyan"
 Write-Color "  /mao-orchestrate        에이전트 배포 및 관리" "Cyan"
 Write-Color "  /mao-score-review       품질 점수화" "Cyan"

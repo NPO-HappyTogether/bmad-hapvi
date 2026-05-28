@@ -57,6 +57,7 @@ SKILLS=(
     "mao-score-review"
     "mao-auto-upgrade"
     "mao-spark"
+    "mao-status"
 )
 # ※ old/ 폴더는 아카이브 전용 — 설치 대상 아님
 
@@ -120,6 +121,30 @@ EOF
     echo -e "${GREEN}✓ _bmad/custom/config.toml 업데이트${NC}"
 fi
 
+# 6. CLAUDE.md 세션 시작 프로토콜 섹션 추가
+CLAUDE_MD="${PROJECT_DIR}/CLAUDE.md"
+SESSION_PROTOCOL='
+## BMad MAO 세션 시작 프로토콜
+
+**매 대화 시작 시 반드시 실행:**
+1. `docs/bmad-status.md` 파일이 존재하면 읽고 현재 상태를 표시한다.
+2. 현재 BMad 워크플로우 위치, 중단 지점, 다음 즉시 액션을 요약해서 사용자에게 보여준다.
+3. 사용자가 별도 지시를 하기 전까지 이 상태를 기반으로 응답한다.
+4. `/mao-status` 스킬로 상세 상태를 언제든 확인할 수 있다.
+'
+
+if [ ! -f "${CLAUDE_MD}" ]; then
+    echo "# 프로젝트" > "${CLAUDE_MD}"
+    echo -e "${GREEN}✓ CLAUDE.md 생성${NC}"
+fi
+
+if grep -q "BMad MAO 세션 시작 프로토콜" "${CLAUDE_MD}" 2>/dev/null; then
+    echo -e "${YELLOW}⚠ CLAUDE.md에 세션 프로토콜이 이미 존재합니다. 건너뜀.${NC}"
+else
+    printf '%s' "${SESSION_PROTOCOL}" >> "${CLAUDE_MD}"
+    echo -e "${GREEN}✓ CLAUDE.md 세션 시작 프로토콜 추가${NC}"
+fi
+
 echo ""
 echo -e "${GREEN}╔══════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║          ✅ MAO 모듈 설치 완료!          ║${NC}"
@@ -128,6 +153,7 @@ echo ""
 echo "사용 방법:"
 echo "  Claude Code에서 다음을 입력하세요:"
 echo ""
+echo "  /mao-status             현재 워크플로우 상태 확인  ← 세션 시작 시 자동 표시"
 echo "  /mao-create-contracts   PRD → 계약서 생성"
 echo "  /mao-orchestrate        에이전트 배포 및 관리"
 echo "  /mao-score-review       품질 점수화"
